@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 // This package will handle GraphQL server requests and responses
 // for you, based on your schema.
 const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
+const buildDataloaders = require('./dataloaders');
 
 const schema = require('./schema');
 const connectMongo = require('./mongo-connector');
@@ -18,7 +19,11 @@ const start = async () => {
   const buildOptions = async (req, res) => {
     const user = await authenticate(req, mongo.Users);
     return {
-      context: {mongo, user},
+      context: {
+        dataloaders: buildDataloaders(mongo),
+        mongo,
+        user
+      },
       schema,
     }
   }
