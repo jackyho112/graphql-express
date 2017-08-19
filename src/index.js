@@ -1,5 +1,4 @@
 const express = require('express');
-const {authenticate} = require('./authentication');
 
 // This package automatically parses JSON requests.
 const bodyParser = require('body-parser');
@@ -7,7 +6,11 @@ const bodyParser = require('body-parser');
 // This package will handle GraphQL server requests and responses
 // for you, based on your schema.
 const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
+
+const {authenticate} = require('./authentication');
+
 const buildDataloaders = require('./dataloaders');
+const formatError = require('./formatError');
 
 const schema = require('./schema');
 const connectMongo = require('./mongo-connector');
@@ -24,6 +27,7 @@ const start = async () => {
         mongo,
         user
       },
+      formatError,
       schema,
     }
   }
